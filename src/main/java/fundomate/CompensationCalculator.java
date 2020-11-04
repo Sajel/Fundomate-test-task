@@ -30,6 +30,7 @@ public class CompensationCalculator {
         validateSumOfFee(subPartners);
 
         List<CompensationCalculationResult> subPartnersCalculationResults = calculatePartners(subPartners, compensation);
+        //Can be calculated during calculating sub partners results
         BigDecimal compensationForPartner = calculatePartnerCompensation(compensation, subPartnersCalculationResults);
 
         List<CompensationCalculationResult> result = new ArrayList<>(subPartnersCalculationResults.size() + 1);
