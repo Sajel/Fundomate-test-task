@@ -1,5 +1,8 @@
 package fundomate;
 
+import fundomate.task1.CompensationCalculationResult;
+import fundomate.task1.CompensationCalculator;
+import fundomate.task1.Partner;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

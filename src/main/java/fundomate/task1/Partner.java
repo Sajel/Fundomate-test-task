@@ -1,4 +1,4 @@
-package fundomate;
+package fundomate.task1;
 
 import java.math.BigDecimal;
 import java.util.Collection;
