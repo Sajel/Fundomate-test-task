@@ -6,6 +6,11 @@ public class CompensationCalculationResult {
     private String partnerName;
     private BigDecimal compensation;
 
+    public CompensationCalculationResult(String partnerName, BigDecimal compensation) {
+        this.partnerName = partnerName;
+        this.compensation = compensation;
+    }
+
     public String getPartnerName() {
         return partnerName;
     }

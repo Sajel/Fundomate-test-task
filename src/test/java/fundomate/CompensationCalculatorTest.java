@@ -9,8 +9,7 @@ import java.util.Optional;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CompensationCalculatorTest {
 
@@ -30,6 +29,7 @@ class CompensationCalculatorTest {
         Collection<CompensationCalculationResult> calculationResults = compensationCalculator.calculate(singleton(topPartner), fullCompensation);
 
         assertAll(
+                () -> assertEquals(4, calculationResults.size(), "Wrong count of calculation result"),
                 () -> assertPartnerCompensation(calculationResults, "Top-partner", 50),
                 () -> assertPartnerCompensation(calculationResults, "Sub-partner1", 150),
                 () -> assertPartnerCompensation(calculationResults, "Sub-partner2", 150),
@@ -71,6 +71,7 @@ class CompensationCalculatorTest {
         Collection<CompensationCalculationResult> calculationResults = compensationCalculator.calculate(asList(topPartner1, topPartner2), fullCompensation);
 
         assertAll(
+                () -> assertEquals(9, calculationResults.size(), "Wrong count of calculation result"),
                 () -> assertPartnerCompensation(calculationResults, "Top-partner1", 20),
                 () -> assertPartnerCompensation(calculationResults, "Partner1.1", 20),
                 () -> assertPartnerCompensation(calculationResults, "Partner1.1.1", 80),
