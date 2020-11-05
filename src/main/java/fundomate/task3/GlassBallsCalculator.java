@@ -1,7 +1,6 @@
 package fundomate.task3;
 
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -14,37 +13,42 @@ public class GlassBallsCalculator {
         this.glassBallThrower = glassBallThrower;
     }
 
-    public int calculate() {
+    public GlassBallCalculationResult calculate() {
         int maxFloor = glassBallThrower.getMaxFloor();
         int currentFloor = maxFloor / 2;
-        SortedMap<Integer, Boolean> floorBrokenMap = new TreeMap<>();
+        LinkedHashMap<Integer, Boolean> floorBrokenMap = new LinkedHashMap<>();
         int stepSize = currentFloor;
+        int result = maxFloor;
         while (currentFloor > 0 && currentFloor <= maxFloor) {
             boolean broken = glassBallThrower.throwBall(currentFloor);
             floorBrokenMap.put(currentFloor, broken);
             System.out.printf("Throwing from [%s], broken - [%s]\n", currentFloor, broken);
-            if(broken) {
-                if(currentFloor == 1) {
+            if (broken) {
+                if (currentFloor == 1) {
                     System.out.printf("Result is [%s]\n", currentFloor);
-                    return currentFloor;
+                    result = currentFloor;
+                    break;
                 }
                 Boolean previousFloorResult = floorBrokenMap.get(currentFloor - 1);
-                if(FALSE.equals(previousFloorResult)) {
+                if (FALSE.equals(previousFloorResult)) {
                     System.out.printf("Result is [%s]\n", currentFloor);
-                    return currentFloor;
+                    result = currentFloor;
+                    break;
                 } else {
-                    stepSize = stepSize == 1 ? stepSize + 1  : stepSize / 2;
+                    stepSize = stepSize == 1 ? stepSize + 1 : stepSize / 2;
                     currentFloor = currentFloor - stepSize;
                 }
             } else {
-                if(currentFloor == maxFloor) {
+                if (currentFloor == maxFloor) {
                     System.out.printf("Result is [%s]\n", currentFloor);
-                    return currentFloor;
+                    result = currentFloor;
+                    break;
                 }
                 Boolean nextFloorResult = floorBrokenMap.get(currentFloor + 1);
-                if(TRUE.equals(nextFloorResult)) {
+                if (TRUE.equals(nextFloorResult)) {
                     System.out.printf("Result is [%s]\n", currentFloor + 1);
-                    return currentFloor + 1;
+                    result = currentFloor + 1;
+                    break;
                 } else {
                     stepSize = stepSize == 1 ? stepSize + 1 : stepSize / 2;
                     currentFloor = currentFloor + stepSize;
@@ -52,6 +56,6 @@ public class GlassBallsCalculator {
             }
 
         }
-        return maxFloor;
+        return new GlassBallCalculationResult(result, floorBrokenMap);
     }
 }
