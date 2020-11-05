@@ -16,7 +16,9 @@ public class GlassBallThrower {
         if (floor > maxFloor || floor <= 0) {
             throw new IllegalArgumentException(format("Wrong floor value: [%s], should be in [1;%s] interval", floor, maxFloor));
         }
-        return floor >= minBreakingFloor;
+        boolean result = floor >= minBreakingFloor;
+        System.out.printf("Throwing from [%s], broken - [%s]\n", floor, result);
+        return result;
     }
 
     public int getMaxFloor() {

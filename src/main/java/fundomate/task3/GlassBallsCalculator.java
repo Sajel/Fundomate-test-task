@@ -20,9 +20,7 @@ public class GlassBallsCalculator {
         int stepSize = currentFloor;
         int result = maxFloor;
         while (currentFloor > 0 && currentFloor <= maxFloor) {
-            boolean broken = glassBallThrower.throwBall(currentFloor);
-            floorBrokenMap.put(currentFloor, broken);
-            System.out.printf("Throwing from [%s], broken - [%s]\n", currentFloor, broken);
+            boolean broken = isBroken(floorBrokenMap, currentFloor);
 
             if (broken) {
                 //if on first floor ball is broken then this floor is the result
@@ -57,6 +55,36 @@ public class GlassBallsCalculator {
         }
         System.out.printf("Result is [%s]\n", result);
         return new GlassBallCalculationResult(result, floorBrokenMap);
+    }
+
+    public GlassBallCalculationResult calculateWithTwoBalls() {
+        LinkedHashMap<Integer, Boolean> floorBrokenMap = new LinkedHashMap<>();
+        int currentFloor = 3;
+        int maxFloor = glassBallThrower.getMaxFloor();
+        int result = maxFloor;
+        while (currentFloor <= maxFloor) {
+            boolean broken = isBroken(floorBrokenMap, currentFloor);
+            if (broken) {
+                if (isBroken(floorBrokenMap, currentFloor - 2)) {
+                    result = currentFloor - 2;
+                } else if (isBroken(floorBrokenMap, currentFloor - 1)) {
+                    result = currentFloor - 1;
+                } else {
+                    result = currentFloor;
+                }
+                break;
+            } else {
+                currentFloor += 3;
+            }
+        }
+        System.out.printf("Result is [%s]\n", result);
+        return new GlassBallCalculationResult(result, floorBrokenMap);
+    }
+
+    private boolean isBroken(LinkedHashMap<Integer, Boolean> floorBrokenMap, int currentFloor) {
+        boolean broken = glassBallThrower.throwBall(currentFloor);
+        floorBrokenMap.put(currentFloor, broken);
+        return broken;
     }
 
     private int updateStepSize(int stepSize) {
