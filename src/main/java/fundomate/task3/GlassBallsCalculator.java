@@ -15,47 +15,51 @@ public class GlassBallsCalculator {
 
     public GlassBallCalculationResult calculate() {
         int maxFloor = glassBallThrower.getMaxFloor();
-        int currentFloor = maxFloor / 2;
         LinkedHashMap<Integer, Boolean> floorBrokenMap = new LinkedHashMap<>();
+        int currentFloor = maxFloor / 2;
         int stepSize = currentFloor;
         int result = maxFloor;
         while (currentFloor > 0 && currentFloor <= maxFloor) {
             boolean broken = glassBallThrower.throwBall(currentFloor);
             floorBrokenMap.put(currentFloor, broken);
             System.out.printf("Throwing from [%s], broken - [%s]\n", currentFloor, broken);
+
             if (broken) {
+                //if on first floor ball is broken then this floor is the result
                 if (currentFloor == 1) {
-                    System.out.printf("Result is [%s]\n", currentFloor);
                     result = currentFloor;
                     break;
                 }
                 Boolean previousFloorResult = floorBrokenMap.get(currentFloor - 1);
+                //if on current floor ball is broken and is not broken on previous floor then current floor is the result
                 if (FALSE.equals(previousFloorResult)) {
-                    System.out.printf("Result is [%s]\n", currentFloor);
                     result = currentFloor;
                     break;
                 } else {
-                    stepSize = stepSize == 1 ? stepSize + 1 : stepSize / 2;
+                    stepSize = updateStepSize(stepSize);
                     currentFloor = currentFloor - stepSize;
                 }
             } else {
                 if (currentFloor == maxFloor) {
-                    System.out.printf("Result is [%s]\n", currentFloor);
-                    result = currentFloor;
-                    break;
+                    throw new IllegalStateException("Ball is not broken at max floor");
                 }
                 Boolean nextFloorResult = floorBrokenMap.get(currentFloor + 1);
+                //if on current floor ball is NOT broken and is broken on the next floor then next floor is the result
                 if (TRUE.equals(nextFloorResult)) {
-                    System.out.printf("Result is [%s]\n", currentFloor + 1);
                     result = currentFloor + 1;
                     break;
                 } else {
-                    stepSize = stepSize == 1 ? stepSize + 1 : stepSize / 2;
+                    stepSize = updateStepSize(stepSize);
                     currentFloor = currentFloor + stepSize;
                 }
             }
 
         }
+        System.out.printf("Result is [%s]\n", result);
         return new GlassBallCalculationResult(result, floorBrokenMap);
+    }
+
+    private int updateStepSize(int stepSize) {
+        return stepSize == 1 ? 2 : stepSize / 2;
     }
 }
